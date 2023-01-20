@@ -1,8 +1,10 @@
 package ru.maxima.springmvc.models;
 
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Size;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
+
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
