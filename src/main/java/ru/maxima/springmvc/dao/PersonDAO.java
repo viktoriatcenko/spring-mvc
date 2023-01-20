@@ -49,26 +49,53 @@ public class PersonDAO {
     }
 
     public Person show(int id) {
-//        return people.stream()
-//                .filter(p -> p.getId() == id)
-//                .findAny()
-//                .orElse(null);
-        return null;
+        Person person = new Person();
+        try {
+            Statement statement = connection.createStatement();
+            String SQL = "select * from person where id = " + id;
+            ResultSet resultSet = statement.executeQuery(SQL);
+            while (resultSet.next()) {
+                person.setId(resultSet.getInt("id"));
+                person.setName(resultSet.getString("name"));
+                person.setAge(resultSet.getInt("age"));
+                person.setEmail(resultSet.getString("email"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return person;
     }
 
     public void save(Person person) {
-        person.setId(++PEOPLE_COUNT);
-//        people.add(person);
+        try {
+            Statement statement = connection.createStatement();
+            String SQL = "insert into person values (" + ++PEOPLE_COUNT + ", '" + person.getName()
+                    + "', " + person.getAge() + ", '" + person.getEmail() + "')";
+            statement.executeUpdate(SQL);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void update(int id, Person updatedPerson) {
-        Person personToBeUpdated = show(id);
-        personToBeUpdated.setName(updatedPerson.getName());
-        personToBeUpdated.setAge(updatedPerson.getAge());
-        personToBeUpdated.setEmail(updatedPerson.getEmail());
+        try {
+            Statement statement = connection.createStatement();
+            String SQL = "update person set name = '" + updatedPerson.getName()
+                    + "', age = " + updatedPerson.getAge() + ", email = '" + updatedPerson.getEmail() +
+                    "' where id = " + id;
+            statement.executeUpdate(SQL);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void delete(int id) {
-//        people.removeIf(p -> p.getId() == id);
+        try {
+            Statement statement = connection.createStatement();
+            String SQL = "delete from person where id = " + id;
+            statement.executeUpdate(SQL);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
